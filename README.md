@@ -1,0 +1,105 @@
+# 🪵 Ondol (온돌) — GIWA Chain Intelligence & AI Security Platform
+
+<div align="center">
+  <p align="center">
+    <strong>A premium, high-utility blockchain telemetry suite and identity compliance platform built natively for the GIWA Chain ecosystem (an Ethereum Layer 2 powered by the OP Stack).</strong>
+  </p>
+</div>
+
+---
+
+## 📖 The Name & Concept
+
+In traditional Korean architecture, **Ondol (온돌)** is the invisible underfloor heating system. While **GIWA (기와)** tiles cover and protect the roof structure, **Ondol** forms the vital, warm foundation underneath. 
+
+This platform serves as the **Ondol** for the GIWA Chain: exposing, auditing, and securing the underlying ledger metrics of the network, converting raw bytes into visual, actionable intelligence for developers, compliance officers, and everyday Web3 users.
+
+---
+
+## 🏆 GASOK Incubation Track Alignment
+
+Ondol is designed to target two major tracks of the **GASOK Builder Acceleration Program** (organized by GIWA and Dunamu):
+
+1.  **AI & Web3 Track**: Combines real-time Layer 2 transaction forensics with advanced AI models to decode smart contract state updates, profile transaction execution paths, and perform automated Solidity audits.
+2.  **GIWA-Native Track**: Integrates Dunamu's native **Dojang identity attestation protocol** directly into visual payment escrow contract flows, proving that identity-gated transactions are highly viable on GIWA.
+
+---
+
+## 🚀 Key Features
+
+### 📈 1. Block Activity Stream (Smooth Telemetry)
+*   **Catmull-Rom Spline Interpolation**: Transaction counts per block are plotted using Cardinal curves (`tension = 0.35`) for fluid, organic visual lines.
+*   **Dual-Layer Data Rendering**: Overlays transaction volumes (primary glowing red layer) with gas consumption statistics (secondary dashed cyan layer).
+*   **Interactive Crosshair & Tooltips**: Snapping guidelines follow the mouse to display detailed block heights, transaction counts, gas limits, and timestamps dynamically.
+
+### 🛡️ 2. Dojang Attestation Escrow Sandbox
+*   **Dojang Identity Verifier**: Test any address against the official `DojangScroll` contract (`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`) to confirm verified KYC/AML credentials.
+*   **Escrow Playgrounds**: Simulates automated AI agent payments that release funds only to recipients matching verified Dojang attestations.
+
+### 🤖 3. AI Smart Contract Auditor
+*   **Solidity Bug Scanning**: Parses custom solidity scripts or deployed contracts on-chain to detect reentrancy loops, integer overflows, and validator timestamp manipulations.
+*   **Grading System**: Returns parsed metrics (e.g. `[SECURITY_GRADE: S/A/B/C/D/F]`, composite risk score, critical bug count, and a full markdown report).
+
+### 🐳 4. Live Whale Alerts
+*   **Dynamic Monitoring**: Telemetry loops scan Sepolia transaction values and display active logs for high-value transfers (values $\ge$ 0.1 ETH).
+
+### ⭐ 5. Bookmarks & Watchlists
+*   **Local Storage Watchlist**: Bookmark external addresses or smart contracts directly from the Explorer to monitor their transactions on the main dashboard.
+
+---
+
+## 🔌 Live Network Integrations
+
+Ondol interacts with real GIWA Sepolia network nodes without mocking or simulating telemetry:
+*   **Stats API**: `https://sepolia-explorer.giwa.io/api/v2/stats`
+*   **Blocks API**: `https://sepolia-explorer.giwa.io/api/v2/blocks`
+*   **Transactions API**: `https://sepolia-explorer.giwa.io/api/v2/transactions`
+*   **Dojang Scroll Contract Address**: `0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`
+
+---
+
+## 🛠️ Installation & Setup
+
+### Prerequisites
+*   Node.js (v18+)
+*   npm or yarn
+
+### Steps
+
+1.  **Clone the repository**:
+    ```bash
+    git clone https://github.com/Lesnak1/giwa.git
+    cd giwa
+    ```
+
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+
+3.  **Configure environment variables**:
+    Create a `.env` file in the root directory:
+    ```env
+    VITE_DEEPSEEK_API_KEY=your_api_key_here
+    ```
+
+4.  **Run development server**:
+    ```bash
+    npm run dev
+    ```
+
+5.  **Compile production bundle**:
+    ```bash
+    npm run build
+    ```
+
+---
+
+## 🛡️ Security & Key Management
+
+*   **Zero Leakage**: All API keys are loaded via Vite's environment compiler (`import.meta.env`) or saved locally inside the user's browser storage. 
+*   **Secure Environment**: The Ayarlar (Settings) portal displays a masked placeholder `•••••••• (Vercel Environment Key Active)` to keep the deployer's Vercel credentials completely hidden from site visitors.
+
+---
+
+Developed by **Leknax** (https://github.com/Lesnak1) for the **GIWA GASOK Builder Program**.
