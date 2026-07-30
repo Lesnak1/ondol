@@ -41,6 +41,102 @@ function App() {
   const [agentTarget, setAgentTarget] = useState('');
   const [agentMode, setAgentMode] = useState(''); // 'audit' | 'explain'
 
+  // Web3 Wallet state
+  const [connectedAccount, setConnectedAccount] = useState('');
+  const [walletBalance, setWalletBalance] = useState('');
+  const [isConnectingWallet, setIsConnectingWallet] = useState(false);
+
+  // Check if wallet was previously connected
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.ethereum) {
+      window.ethereum.request({ method: 'eth_accounts' }).then((accounts) => {
+        if (accounts && accounts.length > 0) {
+          setConnectedAccount(accounts[0]);
+          fetchWalletBalance(accounts[0]);
+        }
+      }).catch(console.error);
+
+      const handleAccountsChanged = (accs) => {
+        if (accs.length > 0) {
+          setConnectedAccount(accs[0]);
+          fetchWalletBalance(accs[0]);
+        } else {
+          setConnectedAccount('');
+          setWalletBalance('');
+        }
+      };
+
+      window.ethereum.on?.('accountsChanged', handleAccountsChanged);
+      return () => {
+        window.ethereum.removeListener?.('accountsChanged', handleAccountsChanged);
+      };
+    }
+  }, []);
+
+  const fetchWalletBalance = async (addr) => {
+    try {
+      if (!window.ethereum) return;
+      const hexBal = await window.ethereum.request({
+        method: 'eth_getBalance',
+        params: [addr, 'latest']
+      });
+      if (hexBal) {
+        const ethVal = (parseInt(hexBal, 16) / 1e18).toFixed(4);
+        setWalletBalance(ethVal);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const connectWallet = async () => {
+    if (typeof window === 'undefined' || !window.ethereum) {
+      alert('No EVM wallet found. Please install MetaMask or another EVM wallet to connect.');
+      return;
+    }
+    setIsConnectingWallet(true);
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      if (accounts && accounts.length > 0) {
+        setConnectedAccount(accounts[0]);
+        fetchWalletBalance(accounts[0]);
+
+        // Prompt network switch to GIWA Sepolia (Chain ID 91342 / 0x164c6)
+        const currentChain = await window.ethereum.request({ method: 'eth_chainId' });
+        if (currentChain !== '0x164c6' && currentChain !== '91342') {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: '0x164c6' }]
+            });
+          } catch (switchErr) {
+            if (switchErr.code === 4902) {
+              await window.ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [{
+                  chainId: '0x164c6',
+                  chainName: 'GIWA Sepolia Testnet',
+                  nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+                  rpcUrls: ['https://sepolia-rpc.giwa.io'],
+                  blockExplorerUrls: ['https://sepolia-explorer.giwa.io']
+                }]
+              });
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Wallet connection failed:', err);
+    } finally {
+      setIsConnectingWallet(false);
+    }
+  };
+
+  const disconnectWallet = () => {
+    setConnectedAccount('');
+    setWalletBalance('');
+  };
+
   const handleSaveApiKey = (newKey) => {
     localStorage.setItem('ondol_api_key', newKey);
     setApiKey(newKey);
@@ -99,6 +195,11 @@ function App() {
         currentTheme={theme}
         onThemeChange={setTheme}
         onOpenSettings={() => setIsSettingsOpen(true)} 
+        connectedAccount={connectedAccount}
+        walletBalance={walletBalance}
+        isConnectingWallet={isConnectingWallet}
+        onConnectWallet={connectWallet}
+        onDisconnectWallet={disconnectWallet}
       />
 
       <main className="main-content">

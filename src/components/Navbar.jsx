@@ -1,13 +1,20 @@
 import React from 'react';
-import { Activity, Database, BrainCircuit, Settings, HelpCircle, BookOpen, Sun, Moon, Beaker } from 'lucide-react';
+import { Activity, Database, BrainCircuit, Settings, HelpCircle, BookOpen, Sun, Moon, Beaker, Wallet, LogOut } from 'lucide-react';
 
 export default function Navbar({ 
   currentView, 
   onViewChange, 
   currentTheme, 
   onThemeChange, 
-  onOpenSettings 
+  onOpenSettings,
+  connectedAccount,
+  walletBalance,
+  isConnectingWallet,
+  onConnectWallet,
+  onDisconnectWallet
 }) {
+  const truncateAddr = (addr) => `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+
   return (
     <header className="navbar">
       <div className="container nav-container">
@@ -104,6 +111,47 @@ export default function Navbar({
         </nav>
 
         <div className="nav-controls">
+          {/* Web3 Wallet Connect Button */}
+          {connectedAccount ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div 
+                className="badge badge-cyan" 
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '6px', 
+                  padding: '5px 10px',
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '11px',
+                  cursor: 'pointer'
+                }}
+                title={`Connected: ${connectedAccount}`}
+              >
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#00F2FE', boxShadow: '0 0 6px #00F2FE' }} />
+                {truncateAddr(connectedAccount)}
+                {walletBalance && <span style={{ opacity: 0.75, marginLeft: '2px' }}>({walletBalance} ETH)</span>}
+              </div>
+              <button 
+                className="btn-icon" 
+                onClick={onDisconnectWallet} 
+                title="Disconnect Wallet"
+                style={{ color: 'var(--color-text-muted)' }}
+              >
+                <LogOut size={14} />
+              </button>
+            </div>
+          ) : (
+            <button 
+              className="btn btn-outline" 
+              onClick={onConnectWallet} 
+              disabled={isConnectingWallet}
+              style={{ fontSize: '12px', padding: '6px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Wallet size={14} style={{ color: 'var(--color-secondary)' }} />
+              {isConnectingWallet ? 'Connecting...' : 'Connect Wallet'}
+            </button>
+          )}
+
           {/* Theme switcher pill toggle */}
           <div className="theme-toggle">
             <button 

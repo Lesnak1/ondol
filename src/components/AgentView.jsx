@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Bot, ShieldAlert, Sparkles, Send, RefreshCw, Key, HelpCircle, 
-  Terminal, ShieldCheck, AlertCircle, User, ArrowRightLeft, FileCode, Check, Server 
+  Terminal, ShieldCheck, AlertCircle, User, ArrowRightLeft, FileCode, Check, Server, Download 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -470,12 +470,13 @@ Answer user questions clearly in markdown format. Be friendly and highly technic
                   </div>
                 </div>
               ) : (
-                <div className="input-group" style={{ flex: 1 }}>
+                <div className="input-group">
                   <label className="input-label">Paste Solidity Source Code</label>
                   <textarea 
-                    className="input-field input-field-cyan"
-                    style={{ minHeight: '220px', fontFamily: 'var(--font-mono)', fontSize: '12px', paddingLeft: '16px', resize: 'vertical' }}
-                    placeholder="pragma solidity ^0.8.20; ..."
+                    className="input-field input-field-cyan" 
+                    rows={8}
+                    style={{ fontFamily: 'var(--font-mono)', fontSize: '12px' }}
+                    placeholder="// SPDX-License-Identifier: MIT&#10;pragma solidity ^0.8.20;&#10;&#10;contract VulnerableToken { ... }"
                     value={customCode}
                     onChange={(e) => setCustomCode(e.target.value)}
                   />
@@ -490,11 +491,11 @@ Answer user questions clearly in markdown format. Be friendly and highly technic
               >
                 {auditLoading ? (
                   <>
-                    <RefreshCw className="animate-spin" size={14} /> Running Security Diagnostics...
+                    <RefreshCw className="animate-spin" size={14} /> Auditing Contract Codebase...
                   </>
                 ) : (
                   <>
-                    <Sparkles size={14} /> Initiate AI Security Scan
+                    <Bot size={14} /> Run AI Security Audit
                   </>
                 )}
               </button>
@@ -504,25 +505,36 @@ Answer user questions clearly in markdown format. Be friendly and highly technic
                 <div className="glass-card animate-slideUp" style={{ border: '1px solid rgba(255,255,255,0.05)', background: 'rgba(0,0,0,0.1)', padding: '24px', marginTop: '16px' }}>
                   
                   {/* Scores dashboard */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '24px', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', marginBottom: '20px' }}>
-                    <div className={`rating-circle rating-${auditResult.grade}`}>
-                      {auditResult.grade}
-                    </div>
-                    <div>
-                      <h4 style={{ fontSize: '18px', color: '#FFF' }}>Security Audit Dashboard</h4>
-                      <p style={{ fontSize: '12px', marginBottom: '12px' }}>
-                        Composite Risk Score: <strong style={{ color: 'var(--color-primary)' }}>{auditResult.score}/100</strong>
-                      </p>
-                      
-                      {/* Vulnerability counts row */}
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                        <span className="badge badge-error">Critical: {auditResult.critical}</span>
-                        <span className="badge badge-red">High: {auditResult.high}</span>
-                        <span className="badge badge-purple">Med: {auditResult.medium}</span>
-                        <span className="badge badge-cyan">Low: {auditResult.low}</span>
-                        <span className="badge badge-success">Info: {auditResult.info}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', marginBottom: '20px', flexWrap: 'wrap', gap: '16px' }}>
+                    <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
+                      <div className={`rating-circle rating-${auditResult.grade}`}>
+                        {auditResult.grade}
+                      </div>
+                      <div>
+                        <h4 style={{ fontSize: '18px', color: '#FFF' }}>Security Audit Dashboard</h4>
+                        <p style={{ fontSize: '12px', marginBottom: '12px' }}>
+                          Composite Risk Score: <strong style={{ color: 'var(--color-primary)' }}>{auditResult.score}/100</strong>
+                        </p>
+                        
+                        {/* Vulnerability counts row */}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                          <span className="badge badge-error">Critical: {auditResult.critical}</span>
+                          <span className="badge badge-red">High: {auditResult.high}</span>
+                          <span className="badge badge-purple">Med: {auditResult.medium}</span>
+                          <span className="badge badge-cyan">Low: {auditResult.low}</span>
+                          <span className="badge badge-success">Info: {auditResult.info}</span>
+                        </div>
                       </div>
                     </div>
+
+                    <button 
+                      className="btn btn-outline" 
+                      onClick={downloadAuditReport}
+                      style={{ fontSize: '12px', padding: '8px 14px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                    >
+                      <Download size={14} style={{ color: 'var(--color-secondary)' }} />
+                      Export Report (.md)
+                    </button>
                   </div>
 
                   {/* Audit write-up */}
