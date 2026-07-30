@@ -61,7 +61,7 @@ export default function AgentView({
     }
   }, [initialTarget, initialMode]);
 
-  // Parse custom tags from DeepSeek output
+  // Parse custom tags from AI Auditor output
   const parseAuditOutput = (text) => {
     if (!text) return null;
     

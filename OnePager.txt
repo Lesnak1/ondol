@@ -19,7 +19,7 @@ Ondol is engineered as a decentralized client-side intelligence dashboard commun
    │
    ├───(Web3 Read)───> [DojangScroll Contract: 0xd5077b67dcb5...B9] (Identity verification status)
    │
-   └───(Secure API)──> [DeepSeek Flash Model API] (Solidity security analysis)
+   └───(Secure API)──> [Neural AI Security API] (Solidity security analysis)
 
 ### Key Subsystems:
 1. **Dynamic Spline Telemetry Engine**: Computes Cardinal Catmull-Rom spline curves from on-chain block indexes to draw transaction frequency and gas utilization patterns in real-time.
