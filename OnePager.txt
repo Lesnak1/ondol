@@ -1,0 +1,35 @@
+# Ondol — Technical One-Pager & Architecture Overview
+
+## 1. Executive Summary
+Ondol (온돌) is an advanced blockchain intelligence platform, transaction profiler, and smart contract compliance sandbox designed natively for the GIWA Chain (an Ethereum L2 powered by the OP Stack). 
+
+The platform bridges the gap between raw ledger telemetry and human-readable compliance diagnostics, providing automated AI contract audits and demonstrating compliant escrow payments using Dunamu's Dojang Attestation Service.
+
+---
+
+## 2. Technical Architecture & Data Flow
+
+Ondol is engineered as a decentralized client-side intelligence dashboard communicating with the GIWA Sepolia network via direct, zero-mock API and RPC integrations:
+
+[User Browser]
+   │
+   ├───(HTTP/REST)───> [GIWA Sepolia Indexer API] (Telemetry, blocks, transactions)
+   │
+   ├───(JSON-RPC)────> [GIWA Sepolia Node RPC] (Pings, block height sync)
+   │
+   ├───(Web3 Read)───> [DojangScroll Contract: 0xd5077b67dcb5...B9] (Identity verification status)
+   │
+   └───(Secure API)──> [DeepSeek Flash Model API] (Solidity security analysis)
+
+### Key Subsystems:
+1. **Dynamic Spline Telemetry Engine**: Computes Cardinal Catmull-Rom spline curves from on-chain block indexes to draw transaction frequency and gas utilization patterns in real-time.
+2. **AI Compliance Core**: Interfaces securely with LLM completions endpoints to perform static analysis of Solidity code and generate vulnerability grading reports (S to F scales).
+3. **Dojang Verification Sandbox**: Performs on-chain reads to assess address compliance using the official `DojangScroll` registry.
+4. **RPC Latency Engine**: Executes direct JSON-RPC calls (`eth_blockNumber`) to determine network congestion.
+
+---
+
+## 3. GASOK Track Integration
+
+* **AI & Web3 Track**: Empowers developers to audit Smart Contracts prior to mainnet deployment, lowering the risk of exploits.
+* **GIWA-Native Track**: Demonstrates a concrete, copy-pasteable escrow contract pattern that secures automated AI transfers using native Dojang attestations.
