@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Beaker, ShieldCheck, Activity, Key, Send, Copy, Check, Info, FileCode } from 'lucide-react';
+import { CONTRACT_ADDRESSES } from '../config/contracts';
 
 export default function LabsView() {
   const [activeTab, setActiveTab] = useState('dojang');
@@ -169,7 +170,7 @@ export default function LabsView() {
         method: 'eth_sendTransaction',
         params: [{
           from: accounts[0],
-          to: '0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9', // Target Dojang Escrow Contract
+          to: CONTRACT_ADDRESSES.ONDOL_DOJANG_ESCROW, // Target OndolDojangEscrow Contract
           value: valueHex,
           data: '0x'
         }]

@@ -142,6 +142,7 @@ export default function DocsView() {
               <h4>1. OndolDojangEscrow.sol</h4>
               <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <li>📜 <strong>Contract Source</strong>: <code>contracts/OndolDojangEscrow.sol</code></li>
+                <li>📍 <strong>Deployed Address</strong>: <a href="https://sepolia-explorer.giwa.io/address/0xFE4B4F5F2F8843DC9CA75E563F2F7EB0F44AE83E" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-secondary)', fontFamily: 'var(--font-mono)' }}>0xFE4B4F5F2F8843DC9CA75E563F2F7EB0F44AE83E</a></li>
                 <li>🎯 <strong>Target Chain</strong>: GIWA Sepolia (Chain ID: <code>91342</code>)</li>
                 <li>🏛️ <strong>Dojang Scroll Address</strong>: <code>0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9</code></li>
                 <li>🛠️ <strong>Compiler Version</strong>: <code>v0.8.20+commit.a1b79de6</code></li>
@@ -158,6 +159,7 @@ function refund(uint256 _id) external;`}</pre>
               <h4>2. OndolAuditAttestation.sol</h4>
               <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <li>📜 <strong>Contract Source</strong>: <code>contracts/OndolAuditAttestation.sol</code></li>
+                <li>📍 <strong>Deployed Address</strong>: <a href="https://sepolia-explorer.giwa.io/address/0x8C89EDCA7844194813555661DC47A4A317B1D206" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-secondary)', fontFamily: 'var(--font-mono)' }}>0x8C89EDCA7844194813555661DC47A4A317B1D206</a></li>
                 <li>🎯 <strong>Purpose</strong>: Records verifiable AI security audit certificates directly on-chain</li>
                 <li>🔍 <strong>Verification Standard</strong>: Cryptographic hash of audit report stored with grade scores (S-F)</li>
               </ul>
