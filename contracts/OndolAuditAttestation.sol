@@ -5,10 +5,12 @@ pragma solidity ^0.8.20;
  * @title OndolAuditAttestation
  * @dev On-Chain Smart Contract Audit Attestation Registry for GIWA Chain
  * Stores verifiable security audit reports and grades issued by Ondol AI Security Auditor.
+ * Protected with strict access control to prevent unauthorized audit recordings.
  */
 
 contract OndolAuditAttestation {
     address public owner;
+    mapping(address => bool) public authorizedAuditors;
 
     struct AuditRecord {
         address targetContract;
@@ -32,17 +34,35 @@ contract OndolAuditAttestation {
         address indexed auditor
     );
 
+    event AuditorStatusUpdated(address indexed auditor, bool status);
+
     modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can invoke");
+        require(msg.sender == owner, "Only contract owner can invoke");
+        _;
+    }
+
+    modifier onlyAuthorizedAuditor() {
+        require(msg.sender == owner || authorizedAuditors[msg.sender], "Caller is not an authorized auditor");
         _;
     }
 
     constructor() {
         owner = msg.sender;
+        authorizedAuditors[msg.sender] = true;
+    }
+
+    /**
+     * @notice Set or revoke authorized auditor status
+     */
+    function setAuditorStatus(address _auditor, bool _status) external onlyOwner {
+        require(_auditor != address(0), "Invalid auditor address");
+        authorizedAuditors[_auditor] = _status;
+        emit AuditorStatusUpdated(_auditor, _status);
     }
 
     /**
      * @notice Records an audit report on-chain for verifiability
+     * @dev Protected by onlyAuthorizedAuditor modifier
      */
     function recordAudit(
         address _targetContract,
@@ -50,7 +70,7 @@ contract OndolAuditAttestation {
         uint16 _riskScore,
         uint32 _criticalBugs,
         string calldata _reportIpfsHash
-    ) external returns (bytes32) {
+    ) external onlyAuthorizedAuditor returns (bytes32) {
         require(_targetContract != address(0), "Invalid target contract");
         require(_gradeScore <= 5, "Grade score out of bounds");
 
@@ -67,7 +87,6 @@ contract OndolAuditAttestation {
         }));
 
         verifiedReports[reportId] = true;
-
         emit AuditRecorded(_targetContract, _gradeScore, _riskScore, _criticalBugs, _reportIpfsHash, msg.sender);
         return reportId;
     }
