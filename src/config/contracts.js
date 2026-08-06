@@ -19,6 +19,11 @@ export const ONDOL_ESCROW_ABI = [
     "type": "constructor"
   },
   {
+    "inputs": [],
+    "name": "ReentrancyGuardReentrantCall",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {

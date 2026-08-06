@@ -1,18 +1,20 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+
 /**
  * @title OndolDojangEscrow
  * @dev Identity-Gated Smart Contract Escrow for GIWA Chain (OP Stack L2)
  * Integrates directly with Dunamu's Dojang identity attestation registry (DojangScroll).
- * Strict verification enforcement with zero fallback loopholes and ReentrancyGuard protection.
+ * Enforces OpenZeppelin ReentrancyGuard, strict identity checks, lock periods, and caller access control.
  */
 
 interface IDojangScroll {
     function isVerified(address addr, bytes32 attesterId) external view returns (bool);
 }
 
-contract OndolDojangEscrow {
+contract OndolDojangEscrow is ReentrancyGuard {
     // Official DojangScroll Registry Contract on GIWA Sepolia
     address public constant DOJANG_SCROLL = 0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9;
     
@@ -22,11 +24,6 @@ contract OndolDojangEscrow {
 
     // Lock duration before depositor can request a timeout refund (7 days)
     uint256 public constant REFUND_LOCK_PERIOD = 7 days;
-
-    // Reentrancy Guard state
-    uint256 private constant _NOT_ENTERED = 1;
-    uint256 private constant _ENTERED = 2;
-    uint256 private _status;
 
     struct Escrow {
         address sender;
@@ -50,17 +47,9 @@ contract OndolDojangEscrow {
         _;
     }
 
-    modifier nonReentrant() {
-        require(_status != _ENTERED, "ReentrancyGuard: reentrant call");
-        _status = _ENTERED;
-        _;
-        _status = _NOT_ENTERED;
-    }
-
     constructor(bytes32 _attesterId) {
         attesterId = _attesterId != bytes32(0) ? _attesterId : bytes32(0x64756e616d755f676977615f61747465737465725f6964303030303030303030);
         owner = msg.sender;
-        _status = _NOT_ENTERED;
     }
 
     /**
@@ -96,11 +85,11 @@ contract OndolDojangEscrow {
 
     /**
      * @notice Release funds to recipient ONLY IF recipient is strictly verified on Dunamu Dojang Registry
-     * @dev Zero fallback loopholes: enforces strict IDojangScroll(DOJANG_SCROLL).isVerified() call.
      * @param _id Escrow ID to release
      */
     function releaseOnlyIfVerified(uint256 _id) external nonReentrant {
         Escrow storage item = escrows[_id];
+        require(msg.sender == item.sender || msg.sender == item.recipient || msg.sender == owner, "Unauthorized caller");
         require(!item.released, "Escrow already released");
         require(!item.refunded, "Escrow already refunded");
         require(item.amount > 0, "No funds in escrow");

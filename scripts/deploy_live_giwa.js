@@ -30,7 +30,17 @@ async function compileContract(fileName, contractName) {
     },
   };
 
-  const output = JSON.parse(solc.compile(JSON.stringify(input)));
+  function findImports(importPath) {
+    if (importPath.startsWith('@openzeppelin/')) {
+      const fullPath = path.resolve('node_modules', importPath);
+      if (fs.existsSync(fullPath)) {
+        return { contents: fs.readFileSync(fullPath, 'utf8') };
+      }
+    }
+    return { error: 'File not found' };
+  }
+
+  const output = JSON.parse(solc.compile(JSON.stringify(input), { import: findImports }));
 
   if (output.errors) {
     const fatal = output.errors.filter((e) => e.severity === 'error');
