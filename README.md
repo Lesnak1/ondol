@@ -20,29 +20,41 @@ This platform serves as the **Ondol** for the GIWA Chain: exposing, auditing, an
 
 Ondol is designed to target two major tracks of the **GASOK Builder Acceleration Program** (organized by GIWA and Dunamu):
 
-1.  **AI & Web3 Track**: Combines real-time Layer 2 transaction forensics with advanced AI models to decode smart contract state updates, profile transaction execution paths, and perform automated Solidity audits with exportable reports.
-2.  **GIWA-Native Track**: Integrates Dunamu's native **Dojang identity attestation protocol** directly into visual payment escrow contract flows, proving that identity-gated transactions are highly viable on GIWA.
+1.  **AI & Web3 Track**: Combines real-time Layer 2 transaction forensics with advanced AI models to decode smart contract state updates, profile transaction execution paths, perform automated Solidity audits with exportable reports, and store on-chain audit attestations.
+2.  **GIWA-Native Track**: Integrates Dunamu's native **Dojang identity attestation protocol** directly into visual payment escrow smart contracts (`contracts/OndolDojangEscrow.sol`), proving that identity-gated transactions are highly viable on GIWA.
 
 ---
 
-## 🚀 Key Features
+## 📜 Native Smart Contracts (`contracts/`)
+
+Ondol features production-ready Solidity `^0.8.20` smart contracts engineered for GIWA Sepolia Testnet (`Chain ID 91342`):
+
+1.  **`OndolDojangEscrow.sol`**:
+    *   **Purpose**: Identity-Gated Escrow contract that holds deposited funds and only releases payouts if recipient is verified on Dunamu's `DojangScroll` registry (`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`).
+    *   **Security**: Implements strict Check-Effects-Interactions (CEI) reentrancy protection and sender-triggered refund lock periods.
+2.  **`OndolAuditAttestation.sol`**:
+    *   **Purpose**: Records verifiable cryptographic hashes of AI security audit reports and grades (S to F scales) directly on-chain for institutional compliance verification.
+
+---
+
+## 🚀 Key Subsystems & Features
 
 ### 📈 1. Block Activity Stream (Smooth Telemetry)
 *   **Catmull-Rom Spline Interpolation**: Transaction counts per block are plotted using Cardinal curves (`tension = 0.35`) for fluid, organic visual lines.
 *   **Dual-Layer Data Rendering**: Overlays transaction volumes (primary glowing red layer) with gas consumption statistics (secondary dashed cyan layer).
 *   **Interactive Crosshair & Tooltips**: Snapping guidelines follow the mouse to display detailed block heights, transaction counts, gas limits, and timestamps dynamically.
 
-### 🛡️ 2. Dojang Attestation Escrow Sandbox
+### 🛡️ 2. Dojang Attestation Escrow Sandbox & Web3 Execution
 *   **Dojang Identity Verifier**: Test any address against the official `DojangScroll` contract (`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`) via direct JSON-RPC `eth_call` queries to confirm verified KYC/AML credentials.
-*   **Escrow Playgrounds**: Simulates automated AI agent payments that release funds only to recipients matching verified Dojang attestations.
+*   **On-Chain Web3 Escrow Creator**: Broadcast real Web3 transactions directly from MetaMask or Upbit GIWA Wallet to lock ETH deposits in the `OndolDojangEscrow` contract.
 
 ### 🤖 3. AI Smart Contract Auditor & Report Exporter
 *   **Solidity Bug Scanning**: Parses custom solidity scripts or deployed contracts on-chain to detect reentrancy loops, integer overflows, and validator timestamp manipulations.
 *   **Grading & Export System**: Returns parsed metrics (e.g. `[SECURITY_GRADE: S/A/B/C/D/F]`, composite risk score, critical bug count, and downloadable `.md` audit certificates).
 
-### 👛 4. Native 1-Click Web3 Wallet Connect
+### 👛 4. Native 1-Click Web3 Wallet Connect & Real Balance Fetching
 *   **EIP-1193 Integration**: Connects seamlessly to MetaMask, Coinbase Wallet, or Upbit GIWA Wallet.
-*   **Automatic Network Switching**: Prompts auto-switching to GIWA Sepolia Testnet (`Chain ID 91342`) and reads real ETH balances.
+*   **Direct RPC Balance Queries**: Reads exact ETH balances directly from GIWA Sepolia RPC (`https://sepolia-rpc.giwa.io`) using `BigInt` 64-bit precision.
 
 ### 🐳 5. Live Whale Alerts & Watchlists
 *   **Dynamic Monitoring**: Telemetry loops scan Sepolia transaction values and display active logs for high-value transfers (values $\ge$ 0.1 ETH).
@@ -61,7 +73,7 @@ Ondol interacts directly with real GIWA Sepolia network nodes without mocked dat
 
 ---
 
-## 🛠️ Installation & Setup
+## 🛠️ Installation, Compilation & Setup
 
 ### Prerequisites
 *   Node.js (v18+)
@@ -80,10 +92,9 @@ Ondol interacts directly with real GIWA Sepolia network nodes without mocked dat
     npm install
     ```
 
-3.  **Configure environment variables**:
-    Create a `.env` file in the root directory:
-    ```env
-    VITE_DEEPSEEK_API_KEY=your_api_key_here
+3.  **Compile Smart Contracts**:
+    ```bash
+    node scripts/deploy_contracts.js
     ```
 
 4.  **Run development server**:

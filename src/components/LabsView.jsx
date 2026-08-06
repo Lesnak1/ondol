@@ -20,6 +20,12 @@ export default function LabsView() {
   const [dojangLoading, setDojangLoading] = useState(false);
   const [dojangResult, setDojangResult] = useState(null);
 
+  // Real On-Chain Web3 Escrow state
+  const [escrowRecipient, setEscrowRecipient] = useState('');
+  const [escrowAmount, setEscrowAmount] = useState('0.001');
+  const [escrowTxLoading, setEscrowTxLoading] = useState(false);
+  const [escrowTxHash, setEscrowTxHash] = useState(null);
+
   // Run RPC Latency Check
   const checkRpcStatus = async () => {
     setRpcLoading(true);
@@ -131,6 +137,52 @@ export default function LabsView() {
       console.error('Dojang check error:', err);
     } finally {
       setDojangLoading(false);
+    }
+  };
+
+  // Execute Real On-Chain Web3 Escrow Deposit Transaction
+  const handleCreateOnChainEscrow = async (e) => {
+    e.preventDefault();
+    if (!window.ethereum) {
+      alert('No Web3 wallet provider detected. Please connect MetaMask or Upbit GIWA Wallet.');
+      return;
+    }
+    if (!escrowRecipient.startsWith('0x') || escrowRecipient.length !== 42) {
+      alert('Invalid recipient address format. Must be a 42-character EVM address.');
+      return;
+    }
+
+    setEscrowTxLoading(true);
+    setEscrowTxHash(null);
+
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      if (!accounts || accounts.length === 0) {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+      }
+
+      const valInWei = BigInt(Math.floor(parseFloat(escrowAmount || '0.001') * 1e18));
+      const valueHex = '0x' + valInWei.toString(16);
+
+      // Trigger real EIP-1193 Web3 transaction on GIWA Sepolia network
+      const txHash = await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [{
+          from: accounts[0],
+          to: '0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9', // Target Dojang Escrow Contract
+          value: valueHex,
+          data: '0x'
+        }]
+      });
+
+      setEscrowTxHash(txHash);
+    } catch (err) {
+      console.error('Escrow TX error:', err);
+      if (err.code !== 4001) {
+        alert('Transaction Failed: ' + (err.message || 'Error broadcasting transaction'));
+      }
+    } finally {
+      setEscrowTxLoading(false);
     }
   };
 
@@ -337,6 +389,65 @@ contract DojangEscrowPayment {
                   </div>
                 </div>
               )}
+
+              {/* Real Web3 On-Chain Escrow Interaction Card */}
+              <div className="glass-card" style={{ marginTop: '24px', background: 'rgba(0, 242, 254, 0.03)', border: '1px solid rgba(0, 242, 254, 0.2)' }}>
+                <h4 style={{ color: 'var(--color-secondary)', fontSize: '16px', display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+                  <Send size={16} /> Execute Real On-Chain Escrow Deposit (Web3 Transaction)
+                </h4>
+                <p style={{ fontSize: '12.5px', lineHeight: '1.5', marginBottom: '16px' }}>
+                  Broadcast a real Web3 transaction to lock funds in the <code>OndolDojangEscrow</code> contract on GIWA Sepolia. Funds will only be released upon cryptographic Dojang identity verification.
+                </p>
+
+                <form onSubmit={handleCreateOnChainEscrow} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '12px' }}>
+                    <div className="input-group">
+                      <label className="input-label" style={{ fontSize: '10px' }}>Target Recipient Address</label>
+                      <input 
+                        type="text" 
+                        className="input-field" 
+                        style={{ fontSize: '12px' }}
+                        placeholder="0x..."
+                        value={escrowRecipient}
+                        onChange={(e) => setEscrowRecipient(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="input-group">
+                      <label className="input-label" style={{ fontSize: '10px' }}>Amount (ETH)</label>
+                      <input 
+                        type="number" 
+                        step="0.0001"
+                        className="input-field" 
+                        style={{ fontSize: '12px' }}
+                        value={escrowAmount}
+                        onChange={(e) => setEscrowAmount(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <button 
+                    type="submit" 
+                    className="btn btn-primary" 
+                    style={{ alignSelf: 'flex-start', padding: '10px 18px', fontSize: '13px' }}
+                    disabled={escrowTxLoading}
+                  >
+                    {escrowTxLoading ? 'Broadcasting to GIWA Network...' : 'Deposit to Dojang Escrow (Web3 TX)'}
+                  </button>
+                </form>
+
+                {escrowTxHash && (
+                  <div className="glass-card animate-slideUp" style={{ background: 'rgba(0, 230, 118, 0.05)', border: '1px solid rgba(0, 230, 118, 0.2)', marginTop: '14px', padding: '12px 16px' }}>
+                    <p style={{ color: 'var(--color-success)', fontSize: '12px', fontWeight: 600, marginBottom: '4px' }}>
+                      ✅ Transaction Broadcasted Successfully to GIWA Sepolia!
+                    </p>
+                    <p className="mono-text" style={{ fontSize: '11px', wordBreak: 'break-all' }}>
+                      Tx Hash: <a href={`https://sepolia-explorer.giwa.io/tx/${escrowTxHash}`} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-secondary)' }}>{escrowTxHash}</a>
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 

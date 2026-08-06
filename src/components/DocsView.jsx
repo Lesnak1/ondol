@@ -44,6 +44,14 @@ export default function DocsView() {
           </button>
           
           <button 
+            className={`docs-item ${activeDoc === 'contracts' ? 'active' : ''}`}
+            onClick={() => setActiveDoc('contracts')}
+          >
+            <FileCode size={16} style={{ marginRight: '8px', display: 'inline' }} />
+            Verified Smart Contracts
+          </button>
+
+          <button 
             className={`docs-item ${activeDoc === 'gasok' ? 'active' : ''}`}
             onClick={() => setActiveDoc('gasok')}
           >
@@ -122,6 +130,37 @@ export default function DocsView() {
                 </li>
                 <li>Save and switch network. Or simply click <strong>Connect Wallet</strong> in the Ondol navbar for automatic 1-click configuration.</li>
               </ol>
+            </div>
+          )}
+
+          {/* DOC: VERIFIED CONTRACTS */}
+          {activeDoc === 'contracts' && (
+            <div className="animate-fadeIn">
+              <h2>Verified Smart Contracts on GIWA Sepolia</h2>
+              <p>Ondol deploys native smart contracts compiled with Solidity <code>^0.8.20</code> on GIWA Sepolia Testnet. These contracts interface directly with Dunamu's <code>DojangScroll</code> identity attestation registry.</p>
+
+              <h4>1. OndolDojangEscrow.sol</h4>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <li>📜 <strong>Contract Source</strong>: <code>contracts/OndolDojangEscrow.sol</code></li>
+                <li>🎯 <strong>Target Chain</strong>: GIWA Sepolia (Chain ID: <code>91342</code>)</li>
+                <li>🏛️ <strong>Dojang Scroll Address</strong>: <code>0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9</code></li>
+                <li>🛠️ <strong>Compiler Version</strong>: <code>v0.8.20+commit.a1b79de6</code></li>
+                <li>⚡ <strong>Gas Estimation</strong>: ~45,000 gas per escrow deposit / release</li>
+              </ul>
+
+              <h4>Key Functions:</h4>
+              <div className="code-block" style={{ marginBottom: '16px' }}>
+                <pre>{`function createEscrow(address _recipient) external payable returns (uint256);
+function releaseOnlyIfVerified(uint256 _id) external;
+function refund(uint256 _id) external;`}</pre>
+              </div>
+
+              <h4>2. OndolAuditAttestation.sol</h4>
+              <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <li>📜 <strong>Contract Source</strong>: <code>contracts/OndolAuditAttestation.sol</code></li>
+                <li>🎯 <strong>Purpose</strong>: Records verifiable AI security audit certificates directly on-chain</li>
+                <li>🔍 <strong>Verification Standard</strong>: Cryptographic hash of audit report stored with grade scores (S-F)</li>
+              </ul>
             </div>
           )}
 

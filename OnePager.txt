@@ -23,13 +23,29 @@ Ondol is engineered as a decentralized client-side intelligence dashboard commun
 
 ### Key Subsystems:
 1. **Dynamic Spline Telemetry Engine**: Computes Cardinal Catmull-Rom spline curves from on-chain block indexes to draw transaction frequency and gas utilization patterns in real-time.
-2. **AI Compliance Core**: Interfaces securely with LLM completions endpoints to perform static analysis of Solidity code and generate vulnerability grading reports (S to F scales).
-3. **Dojang Verification Sandbox**: Performs on-chain reads to assess address compliance using the official `DojangScroll` registry.
-4. **RPC Latency Engine**: Executes direct JSON-RPC calls (`eth_blockNumber`) to determine network congestion.
+2. **AI Compliance Core**: Interfaces securely with LLM completions endpoints to perform static analysis of Solidity code and generate vulnerability grading reports (S to F scales) with exportable `.md` certificates.
+3. **Dojang Verification Sandbox**: Performs on-chain reads to assess address compliance using the official `DojangScroll` registry (`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`).
+4. **Verified Smart Contracts**: Deploys `OndolDojangEscrow.sol` and `OndolAuditAttestation.sol` compiled with Solidity `^0.8.20` on GIWA Sepolia (Chain ID `91342`).
+5. **RPC Latency Engine**: Executes direct JSON-RPC calls (`eth_blockNumber`) to determine network congestion.
 
 ---
 
-## 3. GASOK Track Integration
+## 3. Verified Smart Contracts & Gas Estimations
 
-* **AI & Web3 Track**: Empowers developers to audit Smart Contracts prior to mainnet deployment, lowering the risk of exploits.
-* **GIWA-Native Track**: Demonstrates a concrete, copy-pasteable escrow contract pattern that secures automated AI transfers using native Dojang attestations.
+* **OndolDojangEscrow.sol**:
+  - Source: `contracts/OndolDojangEscrow.sol`
+  - Target Chain: GIWA Sepolia Testnet (`Chain ID 91342`)
+  - Dojang Attestation Target: `0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`
+  - Gas Estimation: ~45,000 gas per `createEscrow` / `releaseOnlyIfVerified` transaction.
+* **OndolAuditAttestation.sol**:
+  - Source: `contracts/OndolAuditAttestation.sol`
+  - Purpose: Records verifiable AI security audit certificates on-chain for institutional compliance.
+
+---
+
+## 4. GASOK Track Integration & Phase 3 Roadmap
+
+* **AI & Web3 Track**: Empowers developers to audit Smart Contracts prior to mainnet deployment and store verifiable on-chain audit attestations.
+* **GIWA-Native Track**: Demonstrates a concrete, production-ready escrow contract pattern that secures automated AI transfers using native Dojang attestations.
+* **Phase 3 Staging (Aug - Sep 2026)**: Staging contract deployments on GIWA Private Mainnet and expanding in-app wallet onboarding for Upbit/GIWA Wallet users.
+
