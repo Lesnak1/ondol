@@ -75,17 +75,40 @@ function App() {
 
   const fetchWalletBalance = async (addr) => {
     try {
-      if (!window.ethereum) return;
-      const hexBal = await window.ethereum.request({
-        method: 'eth_getBalance',
-        params: [addr, 'latest']
+      if (!addr) return;
+      // Query GIWA Sepolia RPC node directly to ensure balance is specifically from GIWA Sepolia Testnet
+      const rpcRes = await fetch('https://sepolia-rpc.giwa.io', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          method: 'eth_getBalance',
+          params: [addr, 'latest'],
+          id: 1
+        })
       });
-      if (hexBal) {
-        const ethVal = (parseInt(hexBal, 16) / 1e18).toFixed(4);
+
+      if (rpcRes.ok) {
+        const rpcJson = await rpcRes.json();
+        const hex = rpcJson.result || '0x0';
+        const wei = BigInt(hex);
+        const ethVal = (Number(wei / BigInt(1e14)) / 10000).toFixed(4);
         setWalletBalance(ethVal);
+        return;
+      }
+
+      // Fallback: Query GIWA Sepolia Explorer API
+      const expRes = await fetch(`https://sepolia-explorer.giwa.io/api/v2/addresses/${addr}`);
+      if (expRes.ok) {
+        const expData = await expRes.json();
+        if (expData.coin_balance) {
+          const wei = BigInt(expData.coin_balance);
+          const ethVal = (Number(wei / BigInt(1e14)) / 10000).toFixed(4);
+          setWalletBalance(ethVal);
+        }
       }
     } catch (err) {
-      console.error(err);
+      console.error('Wallet balance fetch error:', err);
     }
   };
 
