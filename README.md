@@ -20,7 +20,7 @@ This platform serves as the **Ondol** for the GIWA Chain: exposing, auditing, an
 
 Ondol is designed to target two major tracks of the **GASOK Builder Acceleration Program** (organized by GIWA and Dunamu):
 
-1.  **AI & Web3 Track**: Combines real-time Layer 2 transaction forensics with advanced AI models to decode smart contract state updates, profile transaction execution paths, and perform automated Solidity audits.
+1.  **AI & Web3 Track**: Combines real-time Layer 2 transaction forensics with advanced AI models to decode smart contract state updates, profile transaction execution paths, and perform automated Solidity audits with exportable reports.
 2.  **GIWA-Native Track**: Integrates Dunamu's native **Dojang identity attestation protocol** directly into visual payment escrow contract flows, proving that identity-gated transactions are highly viable on GIWA.
 
 ---
@@ -33,27 +33,30 @@ Ondol is designed to target two major tracks of the **GASOK Builder Acceleration
 *   **Interactive Crosshair & Tooltips**: Snapping guidelines follow the mouse to display detailed block heights, transaction counts, gas limits, and timestamps dynamically.
 
 ### 🛡️ 2. Dojang Attestation Escrow Sandbox
-*   **Dojang Identity Verifier**: Test any address against the official `DojangScroll` contract (`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`) to confirm verified KYC/AML credentials.
+*   **Dojang Identity Verifier**: Test any address against the official `DojangScroll` contract (`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`) via direct JSON-RPC `eth_call` queries to confirm verified KYC/AML credentials.
 *   **Escrow Playgrounds**: Simulates automated AI agent payments that release funds only to recipients matching verified Dojang attestations.
 
-### 🤖 3. AI Smart Contract Auditor
+### 🤖 3. AI Smart Contract Auditor & Report Exporter
 *   **Solidity Bug Scanning**: Parses custom solidity scripts or deployed contracts on-chain to detect reentrancy loops, integer overflows, and validator timestamp manipulations.
-*   **Grading System**: Returns parsed metrics (e.g. `[SECURITY_GRADE: S/A/B/C/D/F]`, composite risk score, critical bug count, and a full markdown report).
+*   **Grading & Export System**: Returns parsed metrics (e.g. `[SECURITY_GRADE: S/A/B/C/D/F]`, composite risk score, critical bug count, and downloadable `.md` audit certificates).
 
-### 🐳 4. Live Whale Alerts
+### 👛 4. Native 1-Click Web3 Wallet Connect
+*   **EIP-1193 Integration**: Connects seamlessly to MetaMask, Coinbase Wallet, or Upbit GIWA Wallet.
+*   **Automatic Network Switching**: Prompts auto-switching to GIWA Sepolia Testnet (`Chain ID 91342`) and reads real ETH balances.
+
+### 🐳 5. Live Whale Alerts & Watchlists
 *   **Dynamic Monitoring**: Telemetry loops scan Sepolia transaction values and display active logs for high-value transfers (values $\ge$ 0.1 ETH).
-
-### ⭐ 5. Bookmarks & Watchlists
-*   **Local Storage Watchlist**: Bookmark external addresses or smart contracts directly from the Explorer to monitor their transactions on the main dashboard.
+*   **Persistent Watchlists**: Bookmark external addresses or smart contracts directly from the Explorer to monitor their transactions on the main dashboard.
 
 ---
 
 ## 🔌 Live Network Integrations
 
-Ondol interacts with real GIWA Sepolia network nodes without mocking or simulating telemetry:
+Ondol interacts directly with real GIWA Sepolia network nodes without mocked data:
 *   **Stats API**: `https://sepolia-explorer.giwa.io/api/v2/stats`
 *   **Blocks API**: `https://sepolia-explorer.giwa.io/api/v2/blocks`
 *   **Transactions API**: `https://sepolia-explorer.giwa.io/api/v2/transactions`
+*   **JSON-RPC Node**: `https://sepolia-rpc.giwa.io` (Chain ID `91342`)
 *   **Dojang Scroll Contract Address**: `0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`
 
 ---
@@ -68,8 +71,8 @@ Ondol interacts with real GIWA Sepolia network nodes without mocking or simulati
 
 1.  **Clone the repository**:
     ```bash
-    git clone https://github.com/Lesnak1/giwa.git
-    cd giwa
+    git clone https://github.com/Lesnak1/ondol.git
+    cd ondol
     ```
 
 2.  **Install dependencies**:
