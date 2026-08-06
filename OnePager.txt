@@ -33,11 +33,13 @@ Ondol is engineered as a decentralized client-side intelligence dashboard commun
 ## 3. Verified Smart Contracts & Gas Estimations
 
 * **OndolDojangEscrow.sol**:
+  - Live Deployed Address: `0x02BA04BdDF7Fe491FA3dc0AdB5FA5CdDe7D822E0`
   - Source: `contracts/OndolDojangEscrow.sol`
   - Target Chain: GIWA Sepolia Testnet (`Chain ID 91342`)
   - Dojang Attestation Target: `0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`
   - Gas Estimation: ~45,000 gas per `createEscrow` / `releaseOnlyIfVerified` transaction.
 * **OndolAuditAttestation.sol**:
+  - Live Deployed Address: `0x5dA29cF96795c6cA029Cb1dF6240D48d570aCE96`
   - Source: `contracts/OndolAuditAttestation.sol`
   - Purpose: Records verifiable AI security audit certificates on-chain for institutional compliance.
 
