@@ -170,9 +170,9 @@ export default function Navbar({
             </button>
           </div>
 
-          <div className="status-badge" title="GIWA Chain Sepolia JSON-RPC Status">
+          <div className="status-badge" title="GIWA Chain Sepolia JSON-RPC Status (Chain ID: 91342)">
             <span className="status-indicator"></span>
-            <span>Sepolia Testnet</span>
+            <span>GIWA Sepolia Testnet</span>
           </div>
 
           <button 
