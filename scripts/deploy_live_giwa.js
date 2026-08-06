@@ -86,12 +86,15 @@ async function main() {
 
 export const CONTRACT_ADDRESSES = {
   DOJANG_SCROLL: "0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9",
-  ONDOL_DOJANG_ESCROW: "0xFE4B4F5F2F8843DC9CA75E563F2F7EB0F44AE83E",
-  ONDOL_AUDIT_ATTESTATION: "0x8C89EDCA7844194813555661DC47A4A317B1D206"
+  ONDOL_DOJANG_ESCROW: "0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9",
+  ONDOL_AUDIT_ATTESTATION: "0xfe4b4F5f2f8843dC9Ca75E563f2f7eB0f44Ae83e"
 };
 
 export const ONDOL_ESCROW_ABI = ${JSON.stringify(escrowCompiled.abi, null, 2)};
+export const ONDOL_ESCROW_BYTECODE = "0x${escrowCompiled.bytecode}";
+
 export const ONDOL_AUDIT_ABI = ${JSON.stringify(attestationCompiled.abi, null, 2)};
+export const ONDOL_AUDIT_BYTECODE = "0x${attestationCompiled.bytecode}";
 `;
 
     fs.mkdirSync(path.resolve('src', 'config'), { recursive: true });
@@ -124,7 +127,10 @@ export const CONTRACT_ADDRESSES = {
 };
 
 export const ONDOL_ESCROW_ABI = ${JSON.stringify(escrowCompiled.abi, null, 2)};
+export const ONDOL_ESCROW_BYTECODE = "${escrowCompiled.bytecode}";
+
 export const ONDOL_AUDIT_ABI = ${JSON.stringify(attestationCompiled.abi, null, 2)};
+export const ONDOL_AUDIT_BYTECODE = "${attestationCompiled.bytecode}";
 `;
 
   fs.mkdirSync(path.resolve('src', 'config'), { recursive: true });
