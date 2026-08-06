@@ -241,6 +241,7 @@ body.light-theme ::-webkit-scrollbar-thumb {
   font-weight: 800;
   background: linear-gradient(135deg, var(--color-text-main) 0%, var(--color-text-muted) 40%, var(--color-primary) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   display: flex;
   align-items: center;
@@ -977,6 +978,7 @@ body.light-theme .markdown-body blockquote {
   font-weight: 800;
   background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   transition: var(--transition-smooth);
   display: inline-block;
