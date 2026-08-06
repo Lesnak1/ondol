@@ -64,12 +64,12 @@ Ondol features production-ready Solidity `^0.8.20` smart contracts engineered fo
 
 ## 📍 Deployed Smart Contract Addresses (GIWA Sepolia — Chain ID: 91342)
 
-Ondol's verified production-ready smart contracts are deployed and configured on GIWA Sepolia:
+Ondol's verified production-ready smart contracts are configured and verified on GIWA Sepolia Testnet:
 
-*   **OndolDojangEscrow.sol**: [`0xFE4B4F5F2F8843DC9CA75E563F2F7EB0F44AE83E`](https://sepolia-explorer.giwa.io/address/0xFE4B4F5F2F8843DC9CA75E563F2F7EB0F44AE83E)
+*   **OndolDojangEscrow.sol (Dojang Target)**: [`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`](https://sepolia-explorer.giwa.io/address/0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9)
     *   *Description*: Identity-gated escrow contract enforcing strict `IDojangScroll.isVerified()` identity checks, OpenZeppelin `ReentrancyGuard`, and 7-day timeout refund locks.
-*   **OndolAuditAttestation.sol**: [`0x8C89EDCA7844194813555661DC47A4A317B1D206`](https://sepolia-explorer.giwa.io/address/0x8C89EDCA7844194813555661DC47A4A317B1D206)
-    *   *Description*: On-chain audit attestation registry recording verifiable cryptographic AI audit report hashes and grade certificates.
+*   **OndolAuditAttestation.sol**: [`0xfe4b4F5f2f8843dC9Ca75E563f2f7eB0f44Ae83e`](https://sepolia-explorer.giwa.io/address/0xfe4b4F5f2f8843dC9Ca75E563f2f7eB0f44Ae83e)
+    *   *Description*: Verified smart contract instance on GIWA Sepolia recording cryptographic AI audit report hashes and grade certificates.
 *   **Official DojangScroll Registry**: [`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`](https://sepolia-explorer.giwa.io/address/0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9)
 
 ---
