@@ -1147,14 +1147,22 @@ body.light-theme .docs-body h4 {
 @media (max-width: 768px) {
   .nav-container {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
   }
   
   .nav-links {
     width: 100%;
-    justify-content: center;
+    justify-content: flex-start;
     overflow-x: auto;
-    padding-bottom: 4px;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nav-controls {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
   }
   
   .container {
@@ -1165,5 +1173,29 @@ body.light-theme .docs-body h4 {
     flex-direction: column;
     align-items: stretch;
     padding: 16px !important;
+  }
+
+  .glass-card {
+    padding: 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 26px !important;
+  }
+
+  .nav-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .glass-card {
+    padding: 16px !important;
+  }
+
+  .agent-tab-btn {
+    padding: 10px 14px;
+    font-size: 13px;
   }
 }
