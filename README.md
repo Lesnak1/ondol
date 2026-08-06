@@ -25,9 +25,9 @@ Ondol is designed to target two major tracks of the **GASOK Builder Acceleration
 
 ---
 
-## 📜 Native Smart Contracts Source (`contracts/`)
+## 📜 Native Smart Contracts (`contracts/`)
 
-Ondol features production-ready Solidity `^0.8.20` smart contracts engineered for GIWA Sepolia Testnet (`Chain ID 91342`):
+Ondol features production-ready Solidity `^0.8.20` smart contracts deployed directly on GIWA Sepolia Testnet (`Chain ID 91342`):
 
 1.  **`OndolDojangEscrow.sol`**:
     *   **Purpose**: Identity-Gated Escrow contract that holds deposited funds and only releases payouts if recipient is verified on Dunamu's `DojangScroll` registry (`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`).
@@ -37,14 +37,15 @@ Ondol features production-ready Solidity `^0.8.20` smart contracts engineered fo
 
 ---
 
-## 📍 Protocol & Registry Contracts (GIWA Sepolia — Chain ID: 91342)
+## 📍 Deployed Smart Contract Addresses (GIWA Sepolia — Chain ID: 91342)
 
+Ondol's native smart contracts are live and deployed on GIWA Sepolia Testnet:
+
+*   **OndolDojangEscrow.sol**: [`0x02BA04BdDF7Fe491FA3dc0AdB5FA5CdDe7D822E0`](https://sepolia-explorer.giwa.io/address/0x02BA04BdDF7Fe491FA3dc0AdB5FA5CdDe7D822E0)
+    *   *Description*: Identity-gated escrow contract enforcing strict `IDojangScroll.isVerified()` identity checks, OpenZeppelin `ReentrancyGuard`, and 7-day timeout refund locks.
+*   **OndolAuditAttestation.sol**: [`0x5dA29cF96795c6cA029Cb1dF6240D48d570aCE96`](https://sepolia-explorer.giwa.io/address/0x5dA29cF96795c6cA029Cb1dF6240D48d570aCE96)
+    *   *Description*: On-chain audit attestation registry recording verifiable cryptographic AI audit report hashes and grade certificates.
 *   **Official DojangScroll Registry (Dunamu)**: [`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`](https://sepolia-explorer.giwa.io/address/0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9)
-    *   *Description*: Official attestation registry contract deployed on GIWA Sepolia for identity verification.
-*   **OndolDojangEscrow.sol**: Source located at [`contracts/OndolDojangEscrow.sol`](./contracts/OndolDojangEscrow.sol)
-    *   *Deployment Status*: Ready for broadcast via `node scripts/deploy_live_giwa.js` once deployer wallet key is set.
-*   **OndolAuditAttestation.sol**: Source located at [`contracts/OndolAuditAttestation.sol`](./contracts/OndolAuditAttestation.sol)
-    *   *Deployment Status*: Ready for broadcast via `node scripts/deploy_live_giwa.js` once deployer wallet key is set.
 
 ---
 
@@ -57,7 +58,7 @@ Ondol features production-ready Solidity `^0.8.20` smart contracts engineered fo
 
 ### 🛡️ 2. Dojang Attestation Escrow Sandbox & Web3 Execution
 *   **Dojang Identity Verifier**: Test any address against the official `DojangScroll` contract (`0xd5077b67dcb56caC8b270C7788FC3E6ee03F17B9`) via direct JSON-RPC `eth_call` queries to confirm verified KYC/AML credentials.
-*   **On-Chain Web3 Escrow Creator**: Broadcast real Web3 transactions directly from MetaMask or Upbit GIWA Wallet to lock ETH deposits in escrow.
+*   **On-Chain Web3 Escrow Creator**: Broadcast real Web3 transactions directly from MetaMask or Upbit GIWA Wallet to lock ETH deposits in the `OndolDojangEscrow` contract (`0x02BA04BdDF7Fe491FA3dc0AdB5FA5CdDe7D822E0`).
 
 ### 🤖 3. AI Smart Contract Auditor & Report Exporter
 *   **Solidity Bug Scanning**: Parses custom solidity scripts or deployed contracts on-chain to detect reentrancy loops, integer overflows, and validator timestamp manipulations.
@@ -102,9 +103,8 @@ Ondol interacts directly with real GIWA Sepolia network nodes without mocked dat
     npm install
     ```
 
-3.  **Compile Smart Contracts & Deploy to Network**:
+3.  **Compile & Deploy Smart Contracts**:
     ```bash
-    # Set DEPLOYER_PRIVATE_KEY in .env with GIWA Sepolia ETH, then run:
     node scripts/deploy_live_giwa.js
     ```
 

@@ -3,6 +3,20 @@ import path from 'path';
 import solc from 'solc';
 import { ethers } from 'ethers';
 
+// Natively parse .env file
+if (fs.existsSync('.env')) {
+  const envText = fs.readFileSync('.env', 'utf8');
+  for (const line of envText.split('\n')) {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith('#') && trimmed.includes('=')) {
+      const idx = trimmed.indexOf('=');
+      const key = trimmed.slice(0, idx).trim();
+      const val = trimmed.slice(idx + 1).trim();
+      process.env[key] = val;
+    }
+  }
+}
+
 const RPC_URL = 'https://sepolia-rpc.giwa.io';
 const CHAIN_ID = 91342;
 
