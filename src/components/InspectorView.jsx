@@ -116,7 +116,8 @@ export default function InspectorView({ initialSearchQuery, onLaunchAudit, onLau
         const resTokens = await fetch(`https://sepolia-explorer.giwa.io/api/v2/addresses/${queryToSearch}/tokens`);
         if (resTokens.ok) {
           const tokensData = await resTokens.json();
-          setAddressTokens(tokensData || []);
+          const tokenList = Array.isArray(tokensData) ? tokensData : (tokensData?.items || []);
+          setAddressTokens(tokenList);
         }
 
         // If address is contract, fetch verified contract code (optional details)
@@ -594,8 +595,8 @@ export default function InspectorView({ initialSearchQuery, onLaunchAudit, onLau
           {/* TAB CONTENTS: TOKEN BALANCES */}
           {activeAddressTab === 'tokens' && (
             <div>
-              {addressTokens.length === 0 ? (
-                <p style={{ textAlign: 'center', padding: '24px' }}>No ERC20/ERC721 token balances detected.</p>
+              {(!Array.isArray(addressTokens) || addressTokens.length === 0) ? (
+                <p style={{ textAlign: 'center', padding: '24px' }}>No ERC20/ERC721 token balances detected for this address.</p>
               ) : (
                 <div className="table-container">
                   <table className="custom-table">
@@ -608,18 +609,25 @@ export default function InspectorView({ initialSearchQuery, onLaunchAudit, onLau
                       </tr>
                     </thead>
                     <tbody>
-                      {addressTokens.map((item, idx) => (
-                        <tr key={idx}>
-                          <td style={{ fontWeight: 600 }}>{item.token?.name || 'Unknown'}</td>
-                          <td className="mono-text">{item.token?.symbol}</td>
-                          <td className="mono-text" style={{ fontWeight: 700 }}>
-                            {(parseFloat(item.value) / Math.pow(10, parseInt(item.token?.decimals || 18))).toLocaleString(undefined, { maximumFractionDigits: 4 })}
-                          </td>
-                          <td className="mono-text" style={{ fontSize: '12px', color: 'var(--color-text-dark)' }}>
-                            {truncateHash(item.token?.address, 10)}
-                          </td>
-                        </tr>
-                      ))}
+                      {addressTokens.map((item, idx) => {
+                        const tokenObj = item.token || item;
+                        const rawVal = item.value || '0';
+                        const decimals = parseInt(tokenObj?.decimals || 18);
+                        const formattedBal = (parseFloat(rawVal) / Math.pow(10, decimals)).toLocaleString(undefined, { maximumFractionDigits: 4 });
+                        
+                        return (
+                          <tr key={idx}>
+                            <td style={{ fontWeight: 600 }}>{tokenObj?.name || 'Unknown Token'}</td>
+                            <td className="mono-text">{tokenObj?.symbol || 'N/A'}</td>
+                            <td className="mono-text" style={{ fontWeight: 700 }}>
+                              {isNaN(formattedBal) ? rawVal : formattedBal}
+                            </td>
+                            <td className="mono-text" style={{ fontSize: '12px', color: 'var(--color-text-dark)' }}>
+                              {truncateHash(tokenObj?.address, 10)}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
