@@ -1,5 +1,6 @@
 import React from 'react';
-import { Target, Award, Cpu, ShieldCheck, Zap, Wallet, FileCode, Activity } from 'lucide-react';
+import { Target, Award, Cpu, ShieldCheck, Zap, Wallet, FileCode, Activity, CheckCircle2 } from 'lucide-react';
+import { CONTRACT_ADDRESSES } from '../config/contracts';
 
 export default function AboutView() {
   return (
@@ -10,7 +11,7 @@ export default function AboutView() {
         <span className="badge badge-red" style={{ marginBottom: '12px' }}>Ecosystem Mission</span>
         <h1 style={{ fontSize: '36px', marginBottom: '12px', fontWeight: 800 }}>About Ondol (온돌)</h1>
         <p style={{ maxWidth: '650px', margin: '0 auto', fontSize: '15px' }}>
-          An advanced blockchain intelligence platform, contract security auditor, and compliance sandbox built natively for the GIWA Chain ecosystem.
+          An advanced blockchain intelligence platform, contract security auditor, and compliance gateway built natively for the GIWA Chain ecosystem.
         </p>
       </div>
 
@@ -49,6 +50,52 @@ export default function AboutView() {
                 <span><strong>1-Click Web3 Connect</strong>: Native EIP-1193 wallet integration with automatic GIWA Sepolia network switching (Chain ID 91342).</span>
               </li>
             </ul>
+          </div>
+        </div>
+
+        {/* Live On-Chain Deployed Smart Contracts */}
+        <div className="glass-card" style={{ background: 'rgba(0, 242, 254, 0.02)', border: '1px solid rgba(0, 242, 254, 0.2)' }}>
+          <h3 style={{ fontSize: '20px', color: '#FFF', marginBottom: '8px', display: 'flex', gap: '10px', alignItems: 'center' }}>
+            <FileCode style={{ color: 'var(--color-secondary)' }} /> Deployed Smart Contracts on GIWA Sepolia
+          </h3>
+          <p style={{ fontSize: '13px', marginBottom: '20px' }}>
+            Ondol deploys native smart contracts compiled with <code>solc ^0.8.20</code> directly on the GIWA Sepolia Testnet (Chain ID 91342):
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+            <div className="glass-card" style={{ padding: '16px', background: 'rgba(0,0,0,0.2)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                <CheckCircle2 size={14} style={{ color: 'var(--color-success)' }} />
+                <h4 style={{ color: '#FFF', fontSize: '14px' }}>OndolDojangEscrow.sol</h4>
+              </div>
+              <p style={{ fontSize: '12px', marginBottom: '8px' }}>Identity-Gated Escrow contract calling <code>DojangScroll.isVerified()</code>.</p>
+              <a 
+                href={`https://sepolia-explorer.giwa.io/address/${CONTRACT_ADDRESSES.ONDOL_DOJANG_ESCROW}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="mono-text"
+                style={{ fontSize: '11px', color: 'var(--color-secondary)', wordBreak: 'break-all' }}
+              >
+                {CONTRACT_ADDRESSES.ONDOL_DOJANG_ESCROW}
+              </a>
+            </div>
+
+            <div className="glass-card" style={{ padding: '16px', background: 'rgba(0,0,0,0.2)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                <CheckCircle2 size={14} style={{ color: 'var(--color-success)' }} />
+                <h4 style={{ color: '#FFF', fontSize: '14px' }}>OndolAuditAttestation.sol</h4>
+              </div>
+              <p style={{ fontSize: '12px', marginBottom: '8px' }}>On-Chain Security Audit Certificate registry for verifiable AI reports.</p>
+              <a 
+                href={`https://sepolia-explorer.giwa.io/address/${CONTRACT_ADDRESSES.ONDOL_AUDIT_ATTESTATION}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="mono-text"
+                style={{ fontSize: '11px', color: 'var(--color-secondary)', wordBreak: 'break-all' }}
+              >
+                {CONTRACT_ADDRESSES.ONDOL_AUDIT_ATTESTATION}
+              </a>
+            </div>
           </div>
         </div>
 
